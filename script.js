@@ -3,6 +3,8 @@
 function $(id){return document.getElementById(id)}
 
 const elems = ['growthOps','learningOps','workLife','mentalHealth','satisfaction','commute'];
+let currentStep = 0;
+const steps = Array.from(document.querySelectorAll('.multi-step .group'));
 
 document.addEventListener('DOMContentLoaded', ()=>{
   elems.forEach(id=>{
@@ -10,8 +12,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(el && out){ el.addEventListener('input', ()=> out.textContent = el.value); out.textContent = el.value }
   })
 
-  $('analyze').addEventListener('click', analyze);
-  $('reset').addEventListener('click', ()=>{ $('quiz').reset(); location.reload(); });
+  // Multi-step navigation
+  showStep(0);
+  $('nextStep').addEventListener('click', ()=>{ if(currentStep < steps.length-1) showStep(currentStep+1); else completeAnalysis(); });
+  $('prevStep').addEventListener('click', ()=>{ if(currentStep>0) showStep(currentStep-1); });
+  $('reset') && $('reset').addEventListener('click', ()=>{ $('quiz').reset(); location.reload(); });
   // Support scheduling handlers
   const mentalBtn = $('mentalSupport');
   const cbForm = $('callbackForm');
@@ -28,6 +33,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     setTimeout(()=>{ cbForm.classList.remove('hidden'); }, 700);
   }
 })
+
+function showStep(n){
+  steps.forEach((s, i)=> s.style.display = i===n ? 'block' : 'none');
+  currentStep = n;
+  $('prevStep').disabled = n===0;
+  $('nextStep').textContent = n===steps.length-1 ? 'Complete Analysis' : 'Next';
+}
+
+function completeAnalysis(){ analyze(); }
 
 function analyze(){
   // Read inputs
@@ -89,7 +103,9 @@ function analyze(){
   );
 
   // Normalize to 0..100
-  const finalScore = Math.round((score / Object.values(weights).reduce((a,b)=>a+b,0)) * 100);
+  const finalScorePct = Math.round((score / Object.values(weights).reduce((a,b)=>a+b,0)) * 100);
+  // Map to 0..10 for UI
+  const finalScore = Math.round(finalScorePct/10);
 
   // Decide recommendation tiers
   let recommendation = '';
@@ -132,10 +148,10 @@ function analyze(){
   // Render gauge
   const gaugeArc = $('gaugeArc');
   const gaugeText = $('gaugeText');
-  const pct = Math.max(0, Math.min(100, finalScore));
+  const pct = Math.max(0, Math.min(100, finalScorePct));
   // stroke-dasharray uses percent of circumference, so use pct,100
   gaugeArc.setAttribute('stroke-dasharray', `${pct},100`);
-  gaugeText.textContent = `${pct}%`;
+  gaugeText.textContent = `${finalScore}`;
 
   // Render bars for components
   const comps = {
@@ -181,6 +197,41 @@ function analyze(){
 
   $('result').classList.remove('hidden');
   window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+
+  // Render charts with Chart.js
+  renderRadar({
+    workLife: Math.round(workLifeScore*10),
+    mental: Math.round(mentalScore*10),
+    growth: Math.round(growthScore*10),
+    learning: Math.round(learningScore*10),
+    skills: Math.round(skillComposite*10),
+    promotion: Math.round(qual*10),
+    salary: Math.round(salaryRel*10)
+  });
+  renderSalaryChart(curSal, indSal);
+}
+
+let radarChart = null, salaryChart = null;
+function renderRadar(values){
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  const labels = ['Work-Life Balance','Mental Health','Growth','Learning','Skills Match','Promotion','Salary'];
+  const data = [values.workLife, values.mental, values.growth, values.learning, values.skills, values.promotion, values.salary];
+  if(radarChart) radarChart.destroy();
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: { labels, datasets: [{ label: 'Factors (0-10)', data, backgroundColor: 'rgba(216, 90, 236, 0.25)', borderColor: '#d95aeb', pointBackgroundColor:'#fff' }] },
+    options: { scales: { r: { beginAtZero:true, max:10 } }, plugins:{legend:{display:false}} }
+  });
+}
+
+function renderSalaryChart(cur, ind){
+  const ctx = document.getElementById('salaryChart').getContext('2d');
+  if(salaryChart) salaryChart.destroy();
+  salaryChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels:['Your Salary','Industry Avg'], datasets:[{ data:[cur,ind], backgroundColor:['#f472b6','#d95aeb'] }] },
+    options: { plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true } } }
+  });
 }
 
 function sendCallbackRequest(){
@@ -201,5 +252,6 @@ function sendCallbackRequest(){
   // Open user's default mail client
   window.location.href = href;
 }
+
 
 
