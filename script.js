@@ -136,6 +136,8 @@ function analyze(){
   const sub = document.createElement('div'); sub.className = 'banner-sub'; sub.textContent = `Context: ${jobTitle || '—'} ${culture? '• Culture: '+culture : ''} ${notes? '• Notes: '+notes : ''}`;
   banner.appendChild(top); banner.appendChild(msg); banner.appendChild(sub);
   summaryNode.appendChild(banner);
+  // trigger entry animation
+  requestAnimationFrame(()=>{ banner.classList.add('enter'); setTimeout(()=> banner.classList.remove('enter'), 800); });
 
   const list = $('actionsList'); list.innerHTML = '';
   actions.forEach(a=>{ const li = document.createElement('li'); li.textContent = a; list.appendChild(li) });
@@ -192,6 +194,7 @@ function sendCallbackRequest(){
   const href = `mailto:${to}?subject=${subject}&body=${body}`;
   window.location.href = href;
 }
+
 
 
 
