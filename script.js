@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   $('analyze').addEventListener('click', analyze);
   $('reset').addEventListener('click', ()=>{ $('quiz').reset(); location.reload(); });
   // Support scheduling handlers
-  const reqBtn = $('requestCallback');
+  const mentalBtn = $('mentalSupport');
   const cbForm = $('callbackForm');
-  if(reqBtn){ reqBtn.addEventListener('click', ()=> cbForm.classList.remove('hidden')) }
+  if(mentalBtn){ mentalBtn.addEventListener('click', ()=> cbForm.classList.remove('hidden')) }
   const cancel = $('cancelCallback'); if(cancel){ cancel.addEventListener('click', ()=> cbForm.classList.add('hidden')) }
   const send = $('sendCallback'); if(send){ send.addEventListener('click', sendCallbackRequest) }
   // Paid flow: detect ?paid=1 in URL and unlock paid features
@@ -201,3 +201,5 @@ function sendCallbackRequest(){
   // Open user's default mail client
   window.location.href = href;
 }
+
+
