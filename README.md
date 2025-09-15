@@ -23,15 +23,11 @@ Next steps (suggested improvements)
 
 Monetization and paid callback (DodoPayments)
 
-- Quick paid flow: the app includes a placeholder "Pay to request expert callback" button. To use DodoPayments hosted checkout:
-	1. Create a hosted payment link in DodoPayments for your callback product.
-	2. Configure the hosted link's Success/Return URL to this page with `?dodopay=1` (or `?paid=1`) appended, for example: `https://yourdomain/stayornot/index.html?dodopay=1`.
-	3. Replace the `href` of the "Pay to request expert callback" button in `index.html` with your DodoPayments hosted link.
-	4. After payment, DodoPayments should redirect to the Success URL and the app will detect the `dodopay=1` param and unlock the callback form automatically.
+Quick paid flow: the app includes a placeholder "Pay to request expert callback" button. To use DodoPayments hosted checkout, create a hosted payment link and set its success/return URL to this page with `?dodopay=1` appended so the app can unlock the callback form after redirect. Replace the placeholder `href` in `index.html` with your real link.
 
-- Mail recipient: the callback form currently opens a mailto to `therapist@example.com`. Replace that email in `script.js` (`sendCallbackRequest`) with your service email before deployment.
+Mail recipient: the callback form currently opens a mailto to `therapist@example.com`. Replace that email in `script.js` (`sendCallbackRequest`) with your service email before deployment.
 
-- Security & privacy: do not store users' health data without explicit consent and proper data handling policies. Consider adding a consent checkbox and a privacy policy link if you collect PII.
+Security & privacy: do not store users' health data without explicit consent and proper data handling policies. Consider adding a consent checkbox and a privacy policy link if you collect PII.
 
 Vercel deployment and serverless webhook (optional, recommended for secure gating)
 
@@ -51,3 +47,4 @@ Note: The included serverless functions are templates and must be adapted to Dod
 License
 
 This is a lightweight prototype provided as-is for personal use.
+
