@@ -158,17 +158,9 @@
       <p>If your job is affecting your mental health or you feel overwhelmed, consider scheduling a call with a mental health professional. Use the booking link or request a callback below.</p>
 
       <div class="support-actions">
-  <!-- Paid expert callback (replace with your DodoPayments hosted link) -->
-  <a id="paidLink" class="btn" href="https://dodopayments.example/pay/your-product" target="_blank" rel="noopener noreferrer">Pay to request expert callback</a>
-
-        <!-- Replace the href with your Calendly or booking link -->
-        <a id="calendlyLink" class="btn" href="https://calendly.com/your-calendar" target="_blank" rel="noopener noreferrer">Schedule with a specialist</a>
-
-        <!-- Fallback callback request (also used after successful payment redirect) -->
-        <button id="requestCallback" class="btn">Request callback by email</button>
+        <p class="muted">Connect with our warm and friendly mental health friends (experts)</p>
+        <button id="mentalSupport" class="btn">Mental Support</button>
       </div>
-
-      <p class="muted small">Tip: If you use a hosted checkout (Stripe Payment Link), set the "Success URL" to this page with <code>?paid=1</code> (for example: <code>https://yourdomain/stayornot/index.html?paid=1</code>). After payment the page will unlock the paid callback flow.</p>
 
       <div id="callbackForm" class="callback hidden">
         <label>Your name<input type="text" id="cbName" placeholder="Your full name"></label>
@@ -182,7 +174,7 @@
       </div>
       
       <div class="emergency muted small">
-        <strong>Emergency support:</strong> If you are in immediate danger or having suicidal thoughts, contact local emergency services right now. International crisis lines: <a href="https://www.opencounseling.com/suicide-hotlines" target="_blank" rel="noopener noreferrer">Resources</a>.
+        <strong>Emergency support:</strong> If you are in immediate danger or having suicidal thoughts, contact local emergency services right now. International crisis lines: <a href="https://www.suicidestop.com/call_a_hotline.html" target="_blank" rel="noopener noreferrer">Resources</a>.
       </div>
     </section>
   </main>
