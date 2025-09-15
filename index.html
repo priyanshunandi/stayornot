@@ -63,8 +63,8 @@
                   <h1>Should I Stay or Move?</h1>
                   <p class="lead">Answer the questions below. Use sliders, dropdowns, and inputs. When done, click <strong>Analyze</strong> for a personalized recommendation.</p>
 
-                  <form id="quiz" autocomplete="off">
-                    <section class="group">
+                  <form id="quiz" autocomplete="off" class="form-grid">
+                    <section class="group two-col">
                       <h2>Basic info</h2>
                       <label>Job title
                         <input type="text" id="jobTitle" placeholder="e.g., Software Engineer">
@@ -80,7 +80,7 @@
                       </label>
                     </section>
 
-                    <section class="group">
+                    <section class="group two-col">
                       <h2>Financial & Dependence</h2>
                       <label>How dependent are you on this job for income?
                         <select id="incomeDependency">
@@ -99,7 +99,7 @@
                       </label>
                     </section>
 
-                    <section class="group">
+                    <section class="group two-col">
                       <h2>Skills & Growth</h2>
                       <label>Do your skills match this role?
                         <select id="skillMatch">
@@ -137,7 +137,7 @@
                       </label>
                     </section>
 
-                    <section class="group">
+                    <section class="group two-col">
                       <h2>Well-being & Balance</h2>
                       <label>How balanced is your work-life?
                         <input type="range" id="workLife" min="0" max="100" value="50">
@@ -174,7 +174,7 @@
                       <button type="button" id="analyze">Analyze</button>
                       <button type="button" id="reset">Reset</button>
                     </div>
-                  </form>
+                </form>
 
                   <section id="result" class="result hidden">
                     <h2>Recommendation</h2>
@@ -183,6 +183,7 @@
                     <ul id="actionsList"></ul>
                     <h3>Score breakdown</h3>
                     <pre id="breakdown"></pre>
+                    <div id="bars"></div>
                   </section>
 
                   <footer>
@@ -193,5 +194,6 @@
                 <script src="script.js"></script>
               </body>
               </html>
+
 
 
