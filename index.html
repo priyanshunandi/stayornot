@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stay or Move? — Career Decision Helper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Should I Stay or Move?</h1>
+    <p class="lead">Answer the questions below. Use sliders, dropdowns, and inputs. When done, click <strong>Analyze</strong> for a personalized recommendation.</p>
+
+    <form id="quiz" autocomplete="off">
+      <section class="group">
+        <h2>Basic info</h2>
+        <label>Job title
+          <input type="text" id="jobTitle" placeholder="e.g., Software Engineer">
+        </label>
+        <label>Years of experience
+          <input type="number" id="yearsExp" min="0" max="60" value="3">
+        </label>
+        <label>Current annual salary (USD)
+          <input type="number" id="currentSalary" min="0" step="1000" value="60000">
+        </label>
+        <label>Industry avg annual salary (USD)
+          <input type="number" id="industrySalary" min="0" step="1000" value="70000">
+        </label>
+      </section>
+
+      <section class="group">
+        <h2>Financial & Dependence</h2>
+        <label>How dependent are you on this job for income?
+          <select id="incomeDependency">
+            <option value="0">Not much</option>
+            <option value="0.5">Somewhat</option>
+            <option value="1" selected>Very much</option>
+          </select>
+        </label>
+
+        <label>Recent increment (% last year)
+          <input type="number" id="increment" min="-100" max="100" value="3">
+        </label>
+
+        <label>Financial runway (months of savings)
+          <input type="number" id="runway" min="0" max="120" value="6">
+        </label>
+      </section>
+
+      <section class="group">
+        <h2>Skills & Growth</h2>
+        <label>Do your skills match this role?
+          <select id="skillMatch">
+            <option value="0">No</option>
+            <option value="0.5">Partially</option>
+            <option value="1" selected>Yes</option>
+          </select>
+        </label>
+
+        <label>Do you have better skills (that could get you higher roles elsewhere)?
+          <select id="betterSkills">
+            <option value="0">No</option>
+            <option value="0.5">Some</option>
+            <option value="1">Yes</option>
+          </select>
+        </label>
+
+        <label>Are there growth opportunities in your current role?
+          <input type="range" id="growthOps" min="0" max="100" value="60">
+          <output id="growthOpsVal">60</output>
+        </label>
+
+        <label>Are there learning opportunities in this role?
+          <input type="range" id="learningOps" min="0" max="100" value="60">
+          <output id="learningOpsVal">60</output>
+        </label>
+
+        <label>Highest qualification
+          <select id="qualification">
+            <option value="0">High School</option>
+            <option value="0.5">Bachelor's</option>
+            <option value="0.8">Master's</option>
+            <option value="1">PhD / Professional</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="group">
+        <h2>Well-being & Balance</h2>
+        <label>How balanced is your work-life?
+          <input type="range" id="workLife" min="0" max="100" value="50">
+          <output id="workLifeVal">50</output>
+        </label>
+
+        <label>How much is your mental health affected? (0 = not at all, 100 = extremely)
+          <input type="range" id="mentalHealth" min="0" max="100" value="20">
+          <output id="mentalHealthVal">20</output>
+        </label>
+
+        <label>Overall job satisfaction
+          <input type="range" id="satisfaction" min="0" max="100" value="60">
+          <output id="satisfactionVal">60</output>
+        </label>
+
+        <label>Commute / remote friendliness (0 worst - 100 best)
+          <input type="range" id="commute" min="0" max="100" value="70">
+          <output id="commuteVal">70</output>
+        </label>
+      </section>
+
+      <section class="group">
+        <h2>Extra context (optional)</h2>
+        <label>Company culture (brief)
+          <input type="text" id="culture" placeholder="e.g., supportive, toxic, ambiguous">
+        </label>
+        <label>Anything else you'd like the tool to consider
+          <input type="text" id="notes" placeholder="e.g., family needs, visa constraints">
+        </label>
+      </section>
+
+      <div class="actions">
+        <button type="button" id="analyze">Analyze</button>
+        <button type="button" id="reset">Reset</button>
+      </div>
+    </form>
+
+    <section id="result" class="result hidden">
+      <h2>Recommendation</h2>
+      <div class="result-top">
+        <div id="gauge" class="gauge" aria-hidden="true">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <path id="gaugeArc" class="circle" stroke-dasharray="0,100" d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <text id="gaugeText" x="18" y="20.35" class="percentage">0%</text>
+          </svg>
+        </div>
+        <div id="summary" class="summary-block"></div>
+      </div>
+
+      <h3>Actionable next steps</h3>
+      <ul id="actionsList"></ul>
+
+      <h3>Score breakdown</h3>
+      <div id="bars" class="bars"></div>
+      <pre id="breakdown" class="sr-only"></pre>
+    </section>
+
+    <footer>
+      <small>This tool provides guidance only. Consider financial, legal, and personal constraints before making decisions.</small>
+    </footer>
+    
+    <section class="support">
+      <h3>Support & Scheduling</h3>
+      <p>If your job is affecting your mental health or you feel overwhelmed, consider scheduling a call with a mental health professional. Use the booking link or request a callback below.</p>
+
+      <div class="support-actions">
+  <!-- Paid expert callback (replace with your DodoPayments hosted link) -->
+  <a id="paidLink" class="btn" href="https://dodopayments.example/pay/your-product" target="_blank" rel="noopener noreferrer">Pay to request expert callback</a>
+
+        <!-- Replace the href with your Calendly or booking link -->
+        <a id="calendlyLink" class="btn" href="https://calendly.com/your-calendar" target="_blank" rel="noopener noreferrer">Schedule with a specialist</a>
+
+        <!-- Fallback callback request (also used after successful payment redirect) -->
+        <button id="requestCallback" class="btn">Request callback by email</button>
+      </div>
+
+      <p class="muted small">Tip: If you use a hosted checkout (Stripe Payment Link), set the "Success URL" to this page with <code>?paid=1</code> (for example: <code>https://yourdomain/stayornot/index.html?paid=1</code>). After payment the page will unlock the paid callback flow.</p>
+
+      <div id="callbackForm" class="callback hidden">
+        <label>Your name<input type="text" id="cbName" placeholder="Your full name"></label>
+        <label>Your email<input type="email" id="cbEmail" placeholder="you@example.com"></label>
+        <label>Preferred times / note<input type="text" id="cbNote" placeholder="e.g., weekdays after 6pm"></label>
+        <div style="margin-top:8px">
+          <button id="sendCallback" class="btn">Send request</button>
+          <button id="cancelCallback" class="btn" style="background:#6b7280">Cancel</button>
+        </div>
+        <p class="muted small">Note: this sends an email via your default mail client (mailto). For a more robust booking experience, replace the scheduling link with a Calendly/Setmore/Formspree integration.</p>
+      </div>
+      
+      <div class="emergency muted small">
+        <strong>Emergency support:</strong> If you are in immediate danger or having suicidal thoughts, contact local emergency services right now. International crisis lines: <a href="https://www.opencounseling.com/suicide-hotlines" target="_blank" rel="noopener noreferrer">Resources</a>.
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
