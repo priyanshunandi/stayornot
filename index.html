@@ -55,151 +55,143 @@
               <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width,initial-scale=1" />
-                <title>resignr — Career Reflection</title>
+                <title>Stay or Move? — Career Decision Helper</title>
                 <link rel="stylesheet" href="style.css">
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               </head>
               <body>
-                <header class="site-header">
-                  <div class="brand">resignr</div>
-                  <div class="tag">worth staying in the current job or just resign</div>
-                </header>
+                <main class="container">
+                  <h1>Should I Stay or Move?</h1>
+                  <p class="lead">Answer the questions below. Use sliders, dropdowns, and inputs. When done, click <strong>Analyze</strong> for a personalized recommendation.</p>
 
-                <main class="canvas">
-                  <section class="card">
-                    <div class="card-inner">
-                      <div class="intro">
-                        <h2>Career Reflection Tool</h2>
-                        <p>Making the decision to stay or leave a job is significant. This tool will help you analyze your current position objectively and provide insights to support your decision-making process.</p>
-                      </div>
+                  <form id="quiz" autocomplete="off">
+                    <section class="group">
+                      <h2>Basic info</h2>
+                      <label>Job title
+                        <input type="text" id="jobTitle" placeholder="e.g., Software Engineer">
+                      </label>
+                      <label>Years of experience
+                        <input type="number" id="yearsExp" min="0" max="60" value="3">
+                      </label>
+                      <label>Current annual salary (USD)
+                        <input type="number" id="currentSalary" min="0" step="1000" value="60000">
+                      </label>
+                      <label>Industry avg annual salary (USD)
+                        <input type="number" id="industrySalary" min="0" step="1000" value="70000">
+                      </label>
+                    </section>
 
-                      <form id="quiz" autocomplete="off" class="multi-step">
-                        <section class="group">
-                          <h3>Career Details</h3>
-                          <label class="field">Job Title
-                            <input type="text" id="jobTitle" placeholder="Job Title">
-                          </label>
-                          <label class="field">Years of Experience
-                            <input type="number" id="yearsExp" min="0" max="60" value="3">
-                          </label>
-                          <label class="field">Current Salary
-                            <input type="number" id="currentSalary" min="0" step="1000" value="0">
-                          </label>
-                          <label class="field">Industry Average Salary
-                            <input type="number" id="industrySalary" min="0" step="1000" value="0">
-                          </label>
-                        </section>
+                    <section class="group">
+                      <h2>Financial & Dependence</h2>
+                      <label>How dependent are you on this job for income?
+                        <select id="incomeDependency">
+                          <option value="0">Not much</option>
+                          <option value="0.5">Somewhat</option>
+                          <option value="1" selected>Very much</option>
+                        </select>
+                      </label>
 
-                        <section class="group">
-                          <h3>Skills & Qualifications</h3>
-                          <label class="field">Highest Qualification
-                            <select id="qualification">
-                              <option value="0">High School</option>
-                              <option value="0.5">Bachelor's</option>
-                              <option value="0.8">Master's</option>
-                              <option value="1">PhD / Professional</option>
-                            </select>
-                          </label>
-                          <label class="field">Do your Skillset Match?
-                            <select id="skillMatch">
-                              <option value="0">No</option>
-                              <option value="0.5">Partially</option>
-                              <option value="1" selected>Yes</option>
-                            </select>
-                          </label>
-                          <label class="field">Better Skills for Other Roles?
-                            <select id="betterSkills">
-                              <option value="0">No</option>
-                              <option value="0.5">Some</option>
-                              <option value="1">Yes</option>
-                            </select>
-                          </label>
-                        </section>
+                      <label>Recent increment (% last year)
+                        <input type="number" id="increment" min="-100" max="100" value="3">
+                      </label>
 
-                        <section class="group">
-                          <h3>Job Satisfaction</h3>
-                          <label>Are there growth opportunities in your current role?
-                            <input type="range" id="growthOps" min="0" max="100" value="50">
-                            <output id="growthOpsVal">50</output>
-                          </label>
-                          <label>How balanced is your work-life?
-                            <input type="range" id="workLife" min="0" max="100" value="50">
-                            <output id="workLifeVal">50</output>
-                          </label>
-                          <label>How much is your mental health affected?
-                            <input type="range" id="mentalHealth" min="0" max="100" value="50">
-                            <output id="mentalHealthVal">50</output>
-                          </label>
-                          <label>Are there learning opportunities in this role?
-                            <input type="range" id="learningOps" min="0" max="100" value="50">
-                            <output id="learningOpsVal">50</output>
-                          </label>
-                        </section>
+                      <label>Financial runway (months of savings)
+                        <input type="number" id="runway" min="0" max="120" value="6">
+                      </label>
+                    </section>
 
-                        <div class="actions step-actions">
-                          <button type="button" id="prevStep" class="ghost" disabled>Back</button>
-                          <button type="button" id="nextStep" class="primary">Next</button>
-                        </div>
-                      </form>
+                    <section class="group">
+                      <h2>Skills & Growth</h2>
+                      <label>Do your skills match this role?
+                        <select id="skillMatch">
+                          <option value="0">No</option>
+                          <option value="0.5">Partially</option>
+                          <option value="1" selected>Yes</option>
+                        </select>
+                      </label>
 
-                      <!-- Results area -->
-                      <section id="result" class="result hidden">
-                        <h2>Your Career Analysis</h2>
-                        <p class="lead">This analysis is meant as a guide to help you reflect on your career situation.</p>
-                        <div class="gauge-wrap">
-                          <svg viewBox="0 0 36 36" class="circular-chart">
-                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            <path id="gaugeArc" class="circle" stroke-dasharray="0,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            <text id="gaugeText" x="18" y="20.35" class="percentage">0</text>
-                            <text x="18" y="26" class="sub">out of 10</text>
-                          </svg>
-                        </div>
+                      <label>Do you have better skills (that could get you higher roles elsewhere)?
+                        <select id="betterSkills">
+                          <option value="0">No</option>
+                          <option value="0.5">Some</option>
+                          <option value="1">Yes</option>
+                        </select>
+                      </label>
 
-                        <div class="result-card">
-                          <div id="summary"></div>
-                          <ul id="actionsList"></ul>
-                        </div>
+                      <label>Are there growth opportunities in your current role?
+                        <input type="range" id="growthOps" min="0" max="100" value="60">
+                        <output id="growthOpsVal">60</output>
+                      </label>
 
-                        <div class="charts">
-                          <canvas id="radarChart" width="400" height="300"></canvas>
-                          <canvas id="salaryChart" width="400" height="200"></canvas>
-                        </div>
-                      </section>
+                      <label>Are there learning opportunities in this role?
+                        <input type="range" id="learningOps" min="0" max="100" value="60">
+                        <output id="learningOpsVal">60</output>
+                      </label>
 
+                      <label>Highest qualification
+                        <select id="qualification">
+                          <option value="0">High School</option>
+                          <option value="0.5">Bachelor's</option>
+                          <option value="0.8">Master's</option>
+                          <option value="1">PhD / Professional</option>
+                        </select>
+                      </label>
+                    </section>
+
+                    <section class="group">
+                      <h2>Well-being & Balance</h2>
+                      <label>How balanced is your work-life?
+                        <input type="range" id="workLife" min="0" max="100" value="50">
+                        <output id="workLifeVal">50</output>
+                      </label>
+
+                      <label>How much is your mental health affected? (0 = not at all, 100 = extremely)
+                        <input type="range" id="mentalHealth" min="0" max="100" value="20">
+                        <output id="mentalHealthVal">20</output>
+                      </label>
+
+                      <label>Overall job satisfaction
+                        <input type="range" id="satisfaction" min="0" max="100" value="60">
+                        <output id="satisfactionVal">60</output>
+                      </label>
+
+                      <label>Commute / remote friendliness (0 worst - 100 best)
+                        <input type="range" id="commute" min="0" max="100" value="70">
+                        <output id="commuteVal">70</output>
+                      </label>
+                    </section>
+
+                    <section class="group">
+                      <h2>Extra context (optional)</h2>
+                      <label>Company culture (brief)
+                        <input type="text" id="culture" placeholder="e.g., supportive, toxic, ambiguous">
+                      </label>
+                      <label>Anything else you'd like the tool to consider
+                        <input type="text" id="notes" placeholder="e.g., family needs, visa constraints">
+                      </label>
+                    </section>
+
+                    <div class="actions">
+                      <button type="button" id="analyze">Analyze</button>
+                      <button type="button" id="reset">Reset</button>
                     </div>
+                  </form>
+
+                  <section id="result" class="result hidden">
+                    <h2>Recommendation</h2>
+                    <div id="summary"></div>
+                    <h3>Actionable next steps</h3>
+                    <ul id="actionsList"></ul>
+                    <h3>Score breakdown</h3>
+                    <pre id="breakdown"></pre>
                   </section>
+
+                  <footer>
+                    <small>This tool provides guidance only. Consider financial, legal, and personal constraints before making decisions.</small>
+                  </footer>
                 </main>
 
-                <section class="support">
-                  <h3>Support & Scheduling</h3>
-                  <p>If your job is affecting your mental health or you feel overwhelmed, consider scheduling a call with a mental health professional. Use the booking link or request a callback below.</p>
-
-                  <div class="support-actions">
-                    <p class="muted">Connect with our warm and friendly mental health friends (experts)</p>
-                    <button id="mentalSupport" class="btn">Mental Support</button>
-                  </div>
-
-                  <div id="callbackForm" class="callback hidden">
-                    <label>Your name<input type="text" id="cbName" placeholder="Your full name"></label>
-                    <label>Your email<input type="email" id="cbEmail" placeholder="you@example.com"></label>
-                    <label>Preferred times / note<input type="text" id="cbNote" placeholder="e.g., weekdays after 6pm"></label>
-                    <div style="margin-top:8px">
-                      <button id="sendCallback" class="btn">Send request</button>
-                      <button id="cancelCallback" class="btn" style="background:#6b7280">Cancel</button>
-                    </div>
-                    <p class="muted small">Note: this sends an email via your default mail client (mailto). For a more robust booking experience, replace the scheduling link with a Calendly/Setmore/Formspree integration.</p>
-                  </div>
-    
-                  <div class="emergency muted small">
-                    <strong>Emergency support:</strong> If you are in immediate danger or having suicidal thoughts, contact local emergency services right now. International crisis lines: <a href="https://www.suicidestop.com/call_a_hotline.html" target="_blank" rel="noopener noreferrer">Resources</a>.
-                  </div>
-                </section>
-
                 <script src="script.js"></script>
-                </body>
+              </body>
               </html>
 
-  <script src="script.js"></script>
-</body>
-</html>
 
