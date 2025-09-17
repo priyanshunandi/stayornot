@@ -13,6 +13,43 @@ document.addEventListener('DOMContentLoaded', ()=>{
   $('analyze').addEventListener('click', analyze);
   $('reset').addEventListener('click', ()=>{ $('quiz').reset(); document.getElementById('result').classList.add('hidden'); });
 
+  // Pagination: show/hide pages cPage1..cPage5
+  let currentPage = 1;
+  const totalPages = 5;
+  function showPage(n){
+    const direction = n > currentPage ? 'right' : 'left';
+    for(let i=1;i<=totalPages;i++){
+      const p = document.getElementById('cPage'+i);
+      if(!p) continue;
+      if(i===n){
+        p.style.display = '';
+        p.classList.remove('leave-left','leave-right');
+        p.classList.add('enter');
+      } else {
+        p.classList.remove('enter');
+        p.classList.add(direction === 'right' ? 'leave-left' : 'leave-right');
+        // hide after transition
+        setTimeout(()=>{ if(i!==n) p.style.display = 'none'; }, 360);
+      }
+    }
+    currentPage = n;
+  const prev = document.getElementById('prevPage');
+  const next = document.getElementById('nextPage');
+  if(prev) prev.disabled = n===1;
+  if(next){
+    if(n===totalPages){
+      next.style.display = 'none';
+    } else {
+      next.style.display = '';
+      next.textContent = '▶';
+    }
+  }
+  }
+  showPage(1);
+  const prevBtn = $('prevPage'); const nextBtn = $('nextPage');
+  if(prevBtn) prevBtn.addEventListener('click', ()=>{ if(currentPage>1) showPage(currentPage-1); });
+  if(nextBtn) nextBtn.addEventListener('click', ()=>{ if(currentPage<totalPages) showPage(currentPage+1); else { /* last page: focus analyze */ $('analyze').focus(); } });
+
   // Support scheduling handlers (optional callback form)
   const mentalBtn = $('mentalSupport');
   const cbForm = $('callbackForm');
@@ -22,25 +59,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function analyze(){
-  // Read inputs
-  const jobTitle = $('jobTitle').value.trim();
-  const years = Number($('yearsExp').value || 0);
-  const curSal = Number($('currentSalary').value || 0);
-  const indSal = Number($('industrySalary').value || 0);
-  const incomeDep = Number($('incomeDependency') ? $('incomeDependency').value : 1);
-  const increment = Number($('increment') ? $('increment').value : 0);
-  const runway = Number($('runway') ? $('runway').value : 0);
-  const skillMatch = Number($('skillMatch') ? $('skillMatch').value : 0.5);
-  const betterSkills = Number($('betterSkills') ? $('betterSkills').value : 0);
-  const growthOps = Number($('growthOps') ? $('growthOps').value : 0);
-  const learningOps = Number($('learningOps') ? $('learningOps').value : 0);
-  const qual = Number($('qualification') ? $('qualification').value : 0.5);
-  const workLife = Number($('workLife') ? $('workLife').value : 50);
-  const mental = Number($('mentalHealth') ? $('mentalHealth').value : 0);
-  const satisfaction = Number($('satisfaction') ? $('satisfaction').value : 50);
-  const commute = Number($('commute') ? $('commute').value : 50);
-  const culture = $('culture') ? $('culture').value.trim() : '';
-  const notes = $('notes') ? $('notes').value.trim() : '';
+  // Helper: get an input value from container `cPage1..cPage5` if present, otherwise from global id
+  function getFromPages(selector){
+    for(let i=1;i<=5;i++){
+      const page = document.getElementById('cPage'+i);
+      if(page){
+        const el = page.querySelector(selector);
+        if(el) return el;
+      }
+    }
+    return document.querySelector(selector);
+  }
+
+  // Read inputs (try page containers first)
+  const jobTitleEl = getFromPages('#jobTitle') || getFromPages('input[name=jobTitle]');
+  const jobTitle = jobTitleEl ? (jobTitleEl.value||'').trim() : '';
+  const years = Number((getFromPages('#yearsExp') || {}).value || 0);
+  const curSal = Number((getFromPages('#currentSalary') || {}).value || 0);
+  const indSal = Number((getFromPages('#industrySalary') || {}).value || 0);
+  const incomeDep = Number((getFromPages('#incomeDependency') || {}).value || 1);
+  const increment = Number((getFromPages('#increment') || {}).value || 0);
+  const runway = Number((getFromPages('#runway') || {}).value || 0);
+  const skillMatch = Number((getFromPages('#skillMatch') || {}).value || 0.5);
+  const betterSkills = Number((getFromPages('#betterSkills') || {}).value || 0);
+  const growthOps = Number((getFromPages('#growthOps') || {}).value || 0);
+  const learningOps = Number((getFromPages('#learningOps') || {}).value || 0);
+  const qual = Number((getFromPages('#qualification') || {}).value || 0.5);
+  const workLife = Number((getFromPages('#workLife') || {}).value || 50);
+  const mental = Number((getFromPages('#mentalHealth') || {}).value || 0);
+  const satisfaction = Number((getFromPages('#satisfaction') || {}).value || 50);
+  const commute = Number((getFromPages('#commute') || {}).value || 50);
+  const culture = (getFromPages('#culture') || {}).value ? (getFromPages('#culture').value||'').trim() : '';
+  const notes = (getFromPages('#notes') || {}).value ? (getFromPages('#notes').value||'').trim() : '';
 
   // Normalize components to 0..1 where higher means better for staying
   const salaryRel = indSal > 0 ? Math.min(1, curSal / indSal) : 0.8; // relative to industry
@@ -142,12 +192,8 @@ function analyze(){
   const list = $('actionsList'); list.innerHTML = '';
   actions.forEach(a=>{ const li = document.createElement('li'); li.textContent = a; list.appendChild(li) });
 
-  // Render gauge if present
-  const gaugeArc = $('gaugeArc');
-  const gaugeText = $('gaugeText');
+  // compute percent for visuals
   const pct = Math.max(0, Math.min(100, finalScorePct));
-  if(gaugeArc) gaugeArc.setAttribute('stroke-dasharray', `${pct},100`);
-  if(gaugeText) gaugeText.textContent = `${finalScore}`;
 
   // Render bars
   const comps = {
@@ -176,9 +222,51 @@ function analyze(){
     setTimeout(()=>{ fill.style.width = val + '%'; }, 80);
   });
 
-  $('breakdown').textContent = JSON.stringify({ finalScore, components: { salaryRel: Math.round(salaryRel*100)/100, incomeDependence: incomeDep, growthScore: Math.round(growthScore*100)/100, learningScore: Math.round(learningScore*100)/100, skillComposite: Math.round(skillComposite*100)/100, workLifeScore: Math.round(workLifeScore*100)/100, mentalScore: Math.round(mentalScore*100)/100, satisfactionScore: Math.round(satisfactionScore*100)/100 }, weights }, null, 2);
+  // Debug breakdown removed from UI to keep results clean
+
+  // Update score card visuals
+  const scoreNum = document.getElementById('scoreNum'); if(scoreNum) scoreNum.textContent = `${finalScore}/10`;
+  const gaugeArc = document.getElementById('gaugeArc'); const gaugeText = document.getElementById('gaugeText');
+  if(gaugeArc) gaugeArc.setAttribute('stroke-dasharray', `${pct},100`);
+  if(gaugeText) gaugeText.textContent = `${finalScore}`;
+
+  // Render mini Chart.js radar chart (radar gives a compact profile view)
+  try{
+    const mini = document.getElementById('miniChart');
+    if(mini){
+      const labels = Object.keys(comps);
+      const data = labels.map(k=>comps[k]);
+      if(window._miniChart) window._miniChart.destroy();
+      window._miniChart = new Chart(mini.getContext('2d'),{
+        type:'radar',
+        data:{labels,datasets:[{
+          label:'Profile',
+          data,
+          backgroundColor:'rgba(250,204,21,0.14)',
+          borderColor:'#facc15',
+          pointBackgroundColor:'#d4a017',
+          pointRadius:3
+        }]},
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{r:{beginAtZero:true,max:100,grid:{color:'rgba(15,23,42,0.06)'},angleLines:{color:'rgba(15,23,42,0.04)'},ticks:{display:false}}},
+          elements:{line:{tension:0.3}}
+        }
+      });
+    }
+  }catch(e){console.warn('mini chart failed',e)}
 
   $('result').classList.remove('hidden');
+  // animate score pop
+  const scoreMeta = document.querySelector('.score-top .score-meta') || document.querySelector('.score-meta');
+  if(scoreMeta){
+    scoreMeta.classList.remove('score-pop');
+    // force reflow then add class
+    void scoreMeta.offsetWidth;
+    scoreMeta.classList.add('score-pop');
+  }
   window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
 }
 
@@ -194,6 +282,7 @@ function sendCallbackRequest(){
   const href = `mailto:${to}?subject=${subject}&body=${body}`;
   window.location.href = href;
 }
+
 
 
 
