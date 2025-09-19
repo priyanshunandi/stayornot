@@ -117,89 +117,54 @@ form .group{
 	background: #fff;
 }
 
-/* Score card */
-.score-card{display:flex;gap:18px;align-items:center;padding:18px 14px;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:12px;border:1px solid #f1eaff;margin-bottom:16px}
-.score-left{display:flex;align-items:center;gap:14px;min-width:110px}
-.circular-chart.small{width:76px;height:76px}
-.circle-bg{fill:none;stroke:#eee;stroke-width:2.8}
-.circle{fill:none;stroke:#f5f50a;stroke-width:2.8;stroke-linecap:round}
-.percentage{font-size:8px;text-anchor:middle;fill:#111}
-.score-meta{font-size:13px;color:#6b7280}
-.score-meta #scoreNum{font-weight:700;color:#a16207}
-.score-right{flex:1;min-width:220px;display:flex;flex-direction:column;align-items:center}
-.score-top{display:flex;flex-direction:column;align-items:center}
-.score-top .circular-chart.small{width:86px;height:86px}
-.score-top .score-meta{margin-top:6px;text-align:center}
-.score-top .score-meta #scoreNum{font-size:20px;font-weight:800;color:#f5ca0a}
-.score-pop{animation:score-pop 520ms cubic-bezier(.2,.9,.2,1)}
-@keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
-#miniChart{width:100% !important;display:block}
-.score-right{flex:1;min-width:220px}
-.score-right .chart-wrap{height:160px;width:100%;max-width:420px}
-
-@media(min-width:880px){
-	.form-grid{display:block;gap:12px}
-	.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-	.group.two-col{padding:14px}
-	#miniChart{display:block}
-	.score-right .chart-wrap{height:200px}
-}
-@media(max-width:640px){
-	.score-right .chart-wrap{height:140px}
-	.circular-chart.small{width:64px;height:64px}
+/* ======================
+   Score breakdown bars
+====================== */
+.bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* Banner base */
-.result-banner{
-	transition:transform 260ms ease, opacity 260ms ease;
-	display:flex;flex-direction:column;gap:12px;
-	padding:14px;border-radius:12px;
-	border:1px solid rgba(250,204,21,0.12);
+.bar-label {
+  flex: 1;
+  min-width: 160px;
+  color: #111;
 }
 
-/* Score-based tones */
-.result-banner.score-low{
-	background:linear-gradient(180deg,#fef2f2,#fee2e2);
-	border-color:rgba(239,68,68,0.2);
+.bar-track {
+  flex: 2;
+  background: rgba(255, 255, 255, 0.6);
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0 12px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
 }
-.result-banner.score-low .banner-message{color:#b91c1c}
-.result-banner.score-low .pill{color:#b91c1c;border-color:rgba(239,68,68,0.2)}
 
-.result-banner.score-mid{
-	background:linear-gradient(180deg,#fffbeb,#fffbec);
-	border-color:rgba(250,204,21,0.2);
+.bar-fill {
+  height: 100%;
+  background: #f5f50a; /* solid yellow */
+  border-radius: 999px;
+  width: 0%;
+  transition: width 900ms ease;
 }
-.result-banner.score-mid .banner-message{color:#a16207}
-.result-banner.score-mid .pill{color:#a16207;border-color:rgba(250,204,21,0.2)}
 
-.result-banner.score-high{
-	background:linear-gradient(180deg,#ecfdf5,#d1fae5);
-	border-color:rgba(16,185,129,0.2);
+.bar-percent {
+  min-width: 40px;
+  text-align: right;
+  font-weight: 600;
 }
-.result-banner.score-high .banner-message{color:#047857}
-.result-banner.score-high .pill{color:#047857;border-color:rgba(16,185,129,0.2)}
 
-/* Pills */
-.pills{display:flex;gap:8px;margin-left:8px}
-.pill{background:#fff;padding:6px 10px;border-radius:999px;font-size:13px;display:inline-block}
-.pill.small{font-size:12px;padding:5px 8px}
+/* percent tones */
+.bar-percent.low { color: #dc2626; }   /* red */
+.bar-percent.mid { color: #ca8a04; }   /* yellow-brown */
+.bar-percent.high { color: #16a34a; }  /* green */
 
-/* Messages */
-.banner-message{font-size:16px;margin:4px 0;font-weight:600}
-.banner-sub{color:#6b7280;font-size:14px}
 
-.result-actions{margin-top:8px}
-.result-actions button{
-	background:#f5f50a;
-	border:none;
-	padding:8px 12px;
-	border-radius:8px;
-	font-weight:600;
-	cursor:pointer;
-	color:#111;
-	transition:background 0.2s ease;
-}
-.result-actions button:hover{background:#e5e20a}
 
 
 
