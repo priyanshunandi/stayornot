@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script
+    src="https://cdn.databuddy.cc/databuddy.js"
+    data-client-id="OHkyycc_Z_3r4BSUoaewd"
+    data-enable-batching="true"
+    crossorigin="anonymous"
+    async
+  ></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -15,8 +22,11 @@
   </header>
 
   <main class="container">
-  <h1>Should I Stay or Not?</h1>
-  <p class="lead" style="color:#000000;font-weight:600">Answer the questions across the pages. Use sliders, dropdowns, and inputs. When done, click <strong>Analyze</strong> for a personalized recommendation.</p>
+    <h1>Should I Stay or Not?</h1>
+    <p class="lead" style="color:#000000;font-weight:600">
+      Answer the questions across the pages. Use sliders, dropdowns, and inputs. 
+      When done, click <strong>Analyze</strong> for a personalized recommendation.
+    </p>
 
     <div class="form-wrapper">
       <form id="quiz" autocomplete="off" class="form-grid">
@@ -50,11 +60,9 @@
                 <option value="1" selected>Very much</option>
               </select>
             </label>
-
             <label>Recent increment (% last year)
               <input type="number" id="increment" min="-100" max="100" value="3">
             </label>
-
             <label>Financial runway (months of savings)
               <input type="number" id="runway" min="0" max="120" value="6">
             </label>
@@ -72,7 +80,6 @@
                 <option value="1" selected>Yes</option>
               </select>
             </label>
-
             <label>Do you have better skills (that could get you higher roles elsewhere)?
               <select id="betterSkills">
                 <option value="0">No</option>
@@ -80,17 +87,14 @@
                 <option value="1">Yes</option>
               </select>
             </label>
-
             <label>Are there growth opportunities in your current role?
               <input type="range" id="growthOps" min="0" max="100" value="60">
               <output id="growthOpsVal">60</output>
             </label>
-
             <label>Are there learning opportunities in this role?
               <input type="range" id="learningOps" min="0" max="100" value="60">
               <output id="learningOpsVal">60</output>
             </label>
-
             <label>Highest qualification
               <select id="qualification">
                 <option value="0">High School</option>
@@ -110,17 +114,14 @@
               <input type="range" id="workLife" min="0" max="100" value="50">
               <output id="workLifeVal">50</output>
             </label>
-
             <label>How much is your mental health affected? (0 = not at all, 100 = extremely)
               <input type="range" id="mentalHealth" min="0" max="100" value="20">
               <output id="mentalHealthVal">20</output>
             </label>
-
             <label>Overall job satisfaction
               <input type="range" id="satisfaction" min="0" max="100" value="60">
               <output id="satisfactionVal">60</output>
             </label>
-
             <label>Commute / remote friendliness (0 worst - 100 best)
               <input type="range" id="commute" min="0" max="100" value="70">
               <output id="commuteVal">70</output>
@@ -148,10 +149,9 @@
         </div>
 
         <div class="actions" style="margin-top:10px">
-          <button type="button" id="analyze">Analyze</button>
+          <button type="button" id="analyze" disabled>Analyze</button>
           <button type="button" id="reset">Reset</button>
         </div>
-
       </form>
     </div>
 
@@ -178,20 +178,39 @@
       <h3>Actionable next steps</h3>
       <ul id="actionsList"></ul>
       <h3>Score breakdown</h3>
-      <pre id="breakdown"></pre>
       <div id="bars"></div>
     </section>
 
     <footer>
-      <small>This tool provides guidance only. Consider financial, legal, and personal constraints before making decisions.</small>
+      <small>
+        This tool provides guidance only. Consider financial, legal, and personal constraints before making decisions.
+      </small>
     </footer>
   </main>
 
   <script src="script.js"></script>
 
+  <script
+src="https://cdn.databuddy.cc/databuddy.js"
+data-client-id="OHkyycc_Z_3r4BSUoaewd"
+data-track-screen-views="true"
+data-track-performance="true"
+async
+></script>
   
+   <!-- Databuddy Analytics -->
+  <script
+    src="https://cdn.databuddy.cc/databuddy.js"
+    data-client-id="OHkyycc_Z_3r4BSUoaewd"
+    data-track-screen-views="true"
+    data-track-performance="true"
+    data-track-web-vitals="true"
+    data-track-errors="true"
+    async
+  ></script>
 </body>
 </html>
+
 
 
 
