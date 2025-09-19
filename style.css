@@ -64,6 +64,21 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .page.leave-left{transform:translateX(-20px);opacity:0}
 .page.leave-right{transform:translateX(20px);opacity:0}
 
+/* Ensure radar chart stays proportional */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 240px;   /* fixed height for stable chart */
+}
+
+@media (max-width:640px){
+  .chart-wrap {
+    height: 180px; /* smaller height on mobile */
+  }
+}
+
+
 /* Score card */
 .score-card{display:flex;gap:18px;align-items:center;padding:18px 14px;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:12px;border:1px solid #f1eaff;margin-bottom:16px}
 .circular-chart.small{width:76px;height:76px}
@@ -72,7 +87,6 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .percentage{font-size:8px;text-anchor:middle;fill:#111}
 .score-meta{font-size:13px;color:#6b7280}
 .score-meta #scoreNum{font-weight:700;color:#a16207}
-.score-right{flex:1;min-width:220px;display:flex;flex-direction:column;align-items:center}
 .score-top{display:flex;flex-direction:column;align-items:center}
 .score-top .score-meta{margin-top:6px;text-align:center}
 .score-top .score-meta #scoreNum{font-size:20px;font-weight:800;color:#f5ca0a}
@@ -112,6 +126,7 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .bar-percent.low{color:#dc2626}
 .bar-percent.mid{color:#ca8a04}
 .bar-percent.high{color:#16a34a}
+
 
 
 
