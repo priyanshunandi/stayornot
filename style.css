@@ -79,27 +79,21 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .score-pop{animation:score-pop 520ms cubic-bezier(.2,.9,.2,1)}
 @keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 
-/* Radar chart fix */
+/* Radar chart compact + square */
 #miniChart {
   width: 100% !important;
   height: 100% !important;
   display: block;
 }
-
 .chart-wrap {
   position: relative;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 1 / 1;   /* keep chart square */
-}
-
+  width: 80%;          /* smaller width */
+  max-width: 280px;    /* hard limit so chart stays compact */
+  aspect-ratio: 1 / 1; /* always square */
+  margin: 0 auto;      /* center inside parent */
 }
 @media(max-width:640px){
-  .chart-wrap{height:180px;}
-}
-@media(min-width:880px){
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .chart-wrap{height:260px;}
+  .chart-wrap{max-width:220px;}
 }
 
 /* =====================
@@ -130,6 +124,8 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .bar-percent.low{color:#dc2626}
 .bar-percent.mid{color:#ca8a04}
 .bar-percent.high{color:#16a34a}
+
+
 
 
 
