@@ -41,6 +41,24 @@ output{display:inline-block;margin-left:8px;color:var(--muted)}
 button{padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
 button#reset{background:#6b7280}
 
+/* Disabled analyze button style */
+button#analyze.disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Pulse animation when Analyze is active */
+button#analyze.pulse {
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,245,10,0.6); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(245,245,10,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,245,10,0); }
+}
+
 .result{
   margin-top:18px;
   background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.64));
@@ -66,7 +84,7 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 
 /* Score card */
 .score-card{display:flex;gap:18px;align-items:center;justify-content:center;padding:18px 14px;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:12px;border:1px solid #f1eaff;margin-bottom:16px;flex-wrap:wrap}
-.circular-chart.small{width:68px;height:68px}   /* smaller gauge */
+.circular-chart.small{width:68px;height:68px}
 .circle-bg{fill:none;stroke:#eee;stroke-width:2.8}
 .circle{fill:none;stroke:#f5f50a;stroke-width:2.8;stroke-linecap:round}
 .percentage{font-size:8px;text-anchor:middle;fill:#111}
@@ -85,8 +103,8 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .chart-wrap {
   position: relative;
   width: 80%;
-  max-width: 240px;    /* smaller max size */
-  aspect-ratio: 1 / 1; /* keep square */
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
   margin: 0 auto;
 }
 @media(max-width:640px){
@@ -121,6 +139,8 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .bar-percent.low{color:#dc2626}
 .bar-percent.mid{color:#ca8a04}
 .bar-percent.high{color:#16a34a}
+
+
 
 
 
