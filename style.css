@@ -64,21 +64,6 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .page.leave-left{transform:translateX(-20px);opacity:0}
 .page.leave-right{transform:translateX(20px);opacity:0}
 
-/* Ensure radar chart stays proportional */
-.chart-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  height: 240px;   /* fixed height for stable chart */
-}
-
-@media (max-width:640px){
-  .chart-wrap {
-    height: 180px; /* smaller height on mobile */
-  }
-}
-
-
 /* Score card */
 .score-card{display:flex;gap:18px;align-items:center;padding:18px 14px;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:12px;border:1px solid #f1eaff;margin-bottom:16px}
 .circular-chart.small{width:76px;height:76px}
@@ -87,16 +72,28 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .percentage{font-size:8px;text-anchor:middle;fill:#111}
 .score-meta{font-size:13px;color:#6b7280}
 .score-meta #scoreNum{font-weight:700;color:#a16207}
+.score-right{flex:1;min-width:220px;display:flex;flex-direction:column;align-items:center}
 .score-top{display:flex;flex-direction:column;align-items:center}
 .score-top .score-meta{margin-top:6px;text-align:center}
 .score-top .score-meta #scoreNum{font-size:20px;font-weight:800;color:#f5ca0a}
 .score-pop{animation:score-pop 520ms cubic-bezier(.2,.9,.2,1)}
 @keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 
+/* Radar chart fix */
 #miniChart{width:100%!important;display:block}
-.score-right .chart-wrap{height:160px;width:100%;max-width:420px}
-@media(min-width:880px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.score-right .chart-wrap{height:200px}}
-@media(max-width:640px){.score-right .chart-wrap{height:140px}.circular-chart.small{width:64px;height:64px}}
+.chart-wrap{
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 240px;   /* stable height for chart */
+}
+@media(max-width:640px){
+  .chart-wrap{height:180px;}
+}
+@media(min-width:880px){
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .chart-wrap{height:260px;}
+}
 
 /* =====================
    Recommendation Banner
@@ -126,6 +123,8 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .bar-percent.low{color:#dc2626}
 .bar-percent.mid{color:#ca8a04}
 .bar-percent.high{color:#16a34a}
+
+
 
 
 
