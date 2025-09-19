@@ -1,136 +1,119 @@
-/* Existing CSS … keep your previous rules */
+:root{
+  --bg:#fbfdff;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#f5f50a;
+}
 
-/* ======================
+*{box-sizing:border-box}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  margin:0;background:var(--bg);color:#0f172a;padding:12px;
+  background-image: url('Anime fantasy landsc.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.container{max-width:640px;margin:18px auto;padding:0 14px}
+.container h1{margin:6px 0 8px;font-size:20px}
+.lead{color:var(--muted);margin:0 0 18px}
+
+.form-wrapper{max-width:640px;margin:0 auto}
+form{
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+  padding:18px;border-radius:12px;
+  box-shadow:0 12px 30px rgba(2,6,23,0.10);
+  border: 1px solid rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px) saturate(1.04);
+  -webkit-backdrop-filter: blur(10px) saturate(1.04);
+}
+
+.group{margin-bottom:18px;padding:12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(15,23,42,0.02)}
+.group h2{font-size:15px;margin:0 0 10px;color:#0f172a}
+label{display:block;margin:8px 0;font-size:14px;color:#111}
+input[type=text],input[type=number],select{width:100%;padding:10px;border:1px solid #eef2ff;border-radius:8px;background:#fbfbff}
+input[type=range]{width:100%}
+output{display:inline-block;margin-left:8px;color:var(--muted)}
+
+.actions{display:flex;gap:10px;margin-top:12px}
+button{padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
+button#reset{background:#6b7280}
+
+.result{
+  margin-top:18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.64));
+  padding:16px;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 12px 30px rgba(2,6,23,0.08);
+  backdrop-filter: blur(10px) saturate(1.04);
+  -webkit-backdrop-filter: blur(10px) saturate(1.04);
+}
+.hidden{display:none}
+
+footer{margin-top:12px;color:var(--muted);font-size:13px}
+
+.page-nav{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+.nav-btn{background:var(--accent);border:0;color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer}
+.nav-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+/* Page transitions */
+.page{transition:transform 360ms ease, opacity 360ms ease}
+.page.enter{transform:translateX(0);opacity:1}
+.page.leave-left{transform:translateX(-20px);opacity:0}
+.page.leave-right{transform:translateX(20px);opacity:0}
+
+/* Score card */
+.score-card{display:flex;gap:18px;align-items:center;padding:18px 14px;background:linear-gradient(180deg,#fff,#fbf8ff);border-radius:12px;border:1px solid #f1eaff;margin-bottom:16px}
+.circular-chart.small{width:76px;height:76px}
+.circle-bg{fill:none;stroke:#eee;stroke-width:2.8}
+.circle{fill:none;stroke:#f5f50a;stroke-width:2.8;stroke-linecap:round}
+.percentage{font-size:8px;text-anchor:middle;fill:#111}
+.score-meta{font-size:13px;color:#6b7280}
+.score-meta #scoreNum{font-weight:700;color:#a16207}
+.score-right{flex:1;min-width:220px;display:flex;flex-direction:column;align-items:center}
+.score-top{display:flex;flex-direction:column;align-items:center}
+.score-top .score-meta{margin-top:6px;text-align:center}
+.score-top .score-meta #scoreNum{font-size:20px;font-weight:800;color:#f5ca0a}
+.score-pop{animation:score-pop 520ms cubic-bezier(.2,.9,.2,1)}
+@keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+
+#miniChart{width:100%!important;display:block}
+.score-right .chart-wrap{height:160px;width:100%;max-width:420px}
+@media(min-width:880px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.score-right .chart-wrap{height:200px}}
+@media(max-width:640px){.score-right .chart-wrap{height:140px}.circular-chart.small{width:64px;height:64px}}
+
+/* =====================
    Recommendation Banner
-====================== */
-.result-banner {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 12px;
-  transition: transform 260ms ease, opacity 260ms ease;
-}
+===================== */
+.result-banner{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:12px;transition:transform 260ms ease,opacity 260ms ease}
+.banner-row{display:flex;align-items:center;gap:12px}
+.badge-icon{width:20px;height:20px;border-radius:50%;border:2px solid #fff9c4;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#a16207;font-weight:700}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#fff;padding:6px 10px;border-radius:999px;font-size:13px;color:#374151;display:inline-block;border:1px solid rgba(0,0,0,0.05)}
+.pill.small{font-size:12px;padding:5px 8px}
+.banner-message{font-size:16px;font-weight:600;margin:4px 0;word-break:break-word}
+.banner-sub{color:#6b7280;font-size:14px}
 
-.banner-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+/* Tone variants */
+.result-banner.score-low{background:linear-gradient(180deg,#fef2f2,#fee2e2);border:1px solid rgba(239,68,68,0.2)}
+.result-banner.score-mid{background:linear-gradient(180deg,#fffbeb,#fffdea);border:1px solid rgba(250,204,21,0.2)}
+.result-banner.score-high{background:linear-gradient(180deg,#ecfdf5,#d1fae5);border:1px solid rgba(16,185,129,0.2)}
 
-.badge-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #facc15;
-  color: #a16207;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
-  flex-shrink: 0;
-}
+/* =====================
+   Bars
+===================== */
+.bar-row{display:flex;align-items:center;margin:8px 0}
+.bar-label{width:140px;min-width:110px;font-size:14px;color:var(--muted)}
+.bar-track{flex:1;background:#f1f5f9;height:12px;border-radius:8px;overflow:hidden;margin-left:10px}
+.bar-fill{height:100%;background:#f5f50a;width:0%;transition:width 800ms ease}
+.bar-percent{width:48px;text-align:right;margin-left:8px;font-weight:600}
+.bar-percent.low{color:#dc2626}
+.bar-percent.mid{color:#ca8a04}
+.bar-percent.high{color:#16a34a}
 
-.pills {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
 
-.pill {
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  border: 1px solid rgba(0,0,0,0.05);
-  line-height: 1.2;
-  color: #374151;
-}
-
-.pill.small {
-  font-size: 12px;
-  padding: 5px 10px;
-  font-weight: 500;
-}
-
-.banner-message {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 4px;
-  color: #111827;
-  word-break: break-word;
-}
-
-.banner-sub {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-/* Tone-based */
-.result-banner.score-low {
-  background: linear-gradient(180deg,#fef2f2,#fee2e2);
-  border: 1px solid rgba(239,68,68,0.2);
-}
-.result-banner.score-mid {
-  background: linear-gradient(180deg,#fffbeb,#fffdea);
-  border: 1px solid rgba(250,204,21,0.2);
-}
-.result-banner.score-high {
-  background: linear-gradient(180deg,#ecfdf5,#d1fae5);
-  border: 1px solid rgba(16,185,129,0.2);
-}
-
-/* ======================
-   Score breakdown bars
-====================== */
-.bar-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.bar-label {
-  flex: 1;
-  min-width: 160px;
-  color: #111;
-}
-
-.bar-track {
-  flex: 2;
-  background: rgba(255, 255, 255, 0.6);
-  height: 14px;
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 0 12px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
-}
-
-.bar-fill {
-  height: 100%;
-  background: #f5f50a;
-  border-radius: 999px;
-  width: 0%;
-  transition: width 900ms ease;
-}
-
-.bar-percent {
-  min-width: 40px;
-  text-align: right;
-  font-weight: 600;
-}
-
-.bar-percent.low { color: #dc2626; }
-.bar-percent.mid { color: #ca8a04; }
-.bar-percent.high { color: #16a34a; }
 
 
 
