@@ -1,120 +1,89 @@
-:root {
-	--bg:#fbfdff;
-	--card:#ffffff;
-	--muted:#6b7280;
-	--accent:#f5f50a; /* brighter yellow */
+/* Existing CSS … keep your previous rules */
+
+/* ======================
+   Recommendation Banner
+====================== */
+.result-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  transition: transform 260ms ease, opacity 260ms ease;
 }
 
-*{box-sizing:border-box}
-body{
-	font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-	margin:0;background:var(--bg);color:#0f172a;padding:12px 12px;
-	background-image: url('Anime fantasy landsc.png');
-	background-size: cover;
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
+.banner-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.container{max-width:640px;margin:18px auto;padding:0 14px}
-.container h1{margin:6px 0 8px;font-size:20px}
-.lead{color:var(--muted);margin:0 0 18px}
-
-.form-wrapper{max-width:640px;margin:0 auto}
-form{
-	background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
-	padding:18px;
-	border-radius:12px;
-	box-shadow:0 12px 30px rgba(2,6,23,0.10);
-	position:relative;
-	border: 1px solid rgba(255,255,255,0.6);
-	backdrop-filter: blur(10px) saturate(1.04);
-	-webkit-backdrop-filter: blur(10px) saturate(1.04);
+.badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #facc15;
+  color: #a16207;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
-.group{margin-bottom:18px;padding:12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(15,23,42,0.02)}
-
-.glass{
-	background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(255,255,255,0.48));
-	border: 1px solid rgba(255,255,255,0.5);
-	box-shadow: 0 8px 24px rgba(2,6,23,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
-	backdrop-filter: blur(10px) saturate(1.06);
-	-webkit-backdrop-filter: blur(10px) saturate(1.06);
-	border-radius: 12px;
-	transition: transform 220ms ease, box-shadow 220ms ease;
-}
-.glass:focus-within, .glass:hover{
-	transform: translateY(-4px);
-	box-shadow: 0 12px 30px rgba(2,6,23,0.14), inset 0 1px 0 rgba(255,255,255,0.7);
+.pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-	.glass{
-		background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
-		box-shadow: 0 6px 18px rgba(2,6,23,0.08);
-	}
+.pill {
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.05);
+  line-height: 1.2;
+  color: #374151;
 }
 
-.group h2{font-size:15px;margin:0 0 10px;color:#0f172a}
-label{display:block;margin:8px 0;font-size:14px;color:#111}
-input[type=text],input[type=number],select{width:100%;padding:10px;border:1px solid #eef2ff;border-radius:8px;background:#fbfbff}
-input[type=range]{width:100%}
-output{display:inline-block;margin-left:8px;color:var(--muted)}
-
-.actions{display:flex;gap:10px;margin-top:12px}
-button{padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
-button#reset{background:#6b7280}
-
-.result{
-	margin-top:18px;
-	background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.64));
-	padding:16px;border-radius:12px;
-	border:1px solid rgba(255,255,255,0.6);
-	box-shadow:0 12px 30px rgba(2,6,23,0.08);
-	backdrop-filter: blur(10px) saturate(1.04);
-	-webkit-backdrop-filter: blur(10px) saturate(1.04);
-}
-.result > *{position:relative;z-index:2}
-.hidden{display:none}
-
-pre#breakdown{background:#ffffff;padding:12px;border-radius:8px;color:#0f172a;overflow:auto;border:1px solid #f1f5f9}
-
-footer{margin-top:12px;color:var(--muted);font-size:13px}
-.support{max-width:860px;margin:18px auto}
-.page-nav{margin-top:8px}
-.nav-btn{background:var(--accent);border:0;color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer}
-.nav-btn:disabled{opacity:0.4;cursor:not-allowed}
-
-.page{transition:transform 360ms ease, opacity 360ms ease}
-.page.enter{transform:translateX(0);opacity:1}
-.page.leave-left{transform:translateX(-20px);opacity:0}
-.page.leave-right{transform:translateX(20px);opacity:0}
-
-.bg-overlay{
-	position:fixed;
-	inset:0;
-	pointer-events:none;
-	z-index:0;
-}
-.bg-overlay::before{
-	content:"";
-	position:absolute;inset:0;
-	background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.92) 40%, rgba(255,255,255,0.98) 65%, rgba(255,255,255,1) 100%);
-	mix-blend-mode: normal;
-}
-.bg-overlay::after{
-	content:"";
-	position:absolute;inset:0;
-	background: radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.06) 100%);
-	pointer-events:none;
-	backdrop-filter: blur(6px) saturate(1.02);
-	-webkit-backdrop-filter: blur(6px) saturate(1.02);
+.pill.small {
+  font-size: 12px;
+  padding: 5px 10px;
+  font-weight: 500;
 }
 
-form .group{
-	position: relative;
-	z-index: 1;
-	background: #fff;
+.banner-message {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+  color: #111827;
+  word-break: break-word;
+}
+
+.banner-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Tone-based */
+.result-banner.score-low {
+  background: linear-gradient(180deg,#fef2f2,#fee2e2);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+.result-banner.score-mid {
+  background: linear-gradient(180deg,#fffbeb,#fffdea);
+  border: 1px solid rgba(250,204,21,0.2);
+}
+.result-banner.score-high {
+  background: linear-gradient(180deg,#ecfdf5,#d1fae5);
+  border: 1px solid rgba(16,185,129,0.2);
 }
 
 /* ======================
@@ -147,7 +116,7 @@ form .group{
 
 .bar-fill {
   height: 100%;
-  background: #f5f50a; /* solid yellow */
+  background: #f5f50a;
   border-radius: 999px;
   width: 0%;
   transition: width 900ms ease;
@@ -159,10 +128,11 @@ form .group{
   font-weight: 600;
 }
 
-/* percent tones */
-.bar-percent.low { color: #dc2626; }   /* red */
-.bar-percent.mid { color: #ca8a04; }   /* yellow-brown */
-.bar-percent.high { color: #16a34a; }  /* green */
+.bar-percent.low { color: #dc2626; }
+.bar-percent.mid { color: #ca8a04; }
+.bar-percent.high { color: #16a34a; }
+
+
 
 
 
