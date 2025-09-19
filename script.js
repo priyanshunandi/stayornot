@@ -1,44 +1,25 @@
-// script.js - Stay or Not App
+// Stay or Move? — scoring and recommendation engine
 
 function $(id){ return document.getElementById(id); }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Wire up outputs for range sliders
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Sync range sliders with outputs
   ['growthOps','learningOps','workLife','mentalHealth','satisfaction','commute'].forEach(id=>{
     const el = $(id), out = $(id+'Val');
-    if(el && out){
-      el.addEventListener('input', ()=> out.textContent = el.value);
-      out.textContent = el.value;
-    }
+    if(el && out){ el.addEventListener('input', ()=> out.textContent = el.value); out.textContent = el.value; }
   });
 
   // Buttons
-  const analyzeBtn = $('analyze');
-  if(analyzeBtn){
-    analyzeBtn.addEventListener('click', e=>{
-      e.preventDefault();
-      if(!analyzeBtn.disabled) analyze();
-    });
-  }
-
-  const resetBtn = $('reset');
-  if(resetBtn){
-    resetBtn.addEventListener('click', ()=>{
-      const q = $('quiz'); if(q) q.reset();
-      const res = $('result'); if(res) res.classList.add('hidden');
-      if(window._miniChart){ try{ window._miniChart.destroy(); }catch(e){} window._miniChart = null; }
-      ['growthOps','learningOps','workLife','mentalHealth','satisfaction','commute'].forEach(id=>{
-        const el = $(id), out = $(id+'Val');
-        if(el && out) out.textContent = el.value;
-      });
-    });
-  }
+  $('analyze').addEventListener('click', analyze);
+  $('reset').addEventListener('click', ()=>{
+    $('quiz').reset();
+    $('result').classList.add('hidden');
+  });
 
   // Pagination
   let currentPage = 1;
   const totalPages = 5;
   function showPage(n){
-    if(typeof n !== 'number') return;
     const direction = n > currentPage ? 'right' : 'left';
     for(let i=1;i<=totalPages;i++){
       const p = $('cPage'+i);
@@ -54,21 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     currentPage = n;
-    if($('prevPage')) $('prevPage').disabled = n===1;
-    if($('nextPage')){
-      if(n===totalPages){ $('nextPage').style.display = 'none'; }
-      else { $('nextPage').style.display = ''; }
+    $('prevPage').disabled = n===1;
+    if(n===totalPages){
+      $('nextPage').style.display = 'none';
+      $('analyze').disabled = false;
+    } else {
+      $('nextPage').style.display = '';
+      $('analyze').disabled = true;
     }
-    if(analyzeBtn) analyzeBtn.disabled = (n !== totalPages);
   }
 
   showPage(1);
-  if($('prevPage')) $('prevPage').addEventListener('click', ()=>{ if(currentPage>1) showPage(currentPage-1); });
-  if($('nextPage')) $('nextPage').addEventListener('click', ()=>{ if(currentPage<totalPages) showPage(currentPage+1); });
-
+  $('prevPage').addEventListener('click', ()=>{ if(currentPage>1) showPage(currentPage-1); });
+  $('nextPage').addEventListener('click', ()=>{ if(currentPage<totalPages) showPage(currentPage+1); });
 });
 
-// Analyze
 function analyze(){
   function getFromPages(selector){
     for(let i=1;i<=5;i++){
@@ -81,7 +62,7 @@ function analyze(){
     return document.querySelector(selector);
   }
 
-  // Inputs
+  // Collect inputs
   const jobTitle = (getFromPages('#jobTitle')?.value||'').trim();
   const curSal = Number(getFromPages('#currentSalary')?.value||0);
   const indSal = Number(getFromPages('#industrySalary')?.value||0);
@@ -97,8 +78,8 @@ function analyze(){
   const culture = (getFromPages('#culture')?.value||'').trim();
   const notes = (getFromPages('#notes')?.value||'').trim();
 
-  // Normalization
-  const salaryRel = indSal>0 ? Math.min(1, curSal/indSal) : 0.8;
+  // Score components
+  const salaryRel = indSal>0 ? Math.min(1,curSal/indSal):0.8;
   const growthScore = growthOps/100;
   const learningScore = learningOps/100;
   const workLifeScore = workLife/100;
@@ -122,29 +103,19 @@ function analyze(){
 
   // Recommendation
   let shortMsg="",actions=[];
-  if(finalScorePct>=75){
-    shortMsg="Strong alignment — staying is reasonable; keep building leverage.";
-    actions=["Keep documenting wins.","Prepare a case for fair pay.","Plan a 6–12 month growth roadmap."];
-  } else if(finalScorePct>=55){
-    shortMsg="Mixed alignment — explore selectively while improving key gaps.";
-    actions=["Discuss growth with manager.","Pursue 2–3 skill upgrades.","Start passive job search."];
-  } else if(finalScorePct>=40){
-    shortMsg="Mixed alignment — explore better options; update resume and talk to peers.";
-    actions=["Update CV and LinkedIn.","Consider exit planning if wellbeing is poor.","Seek referrals and insights."];
-  } else {
-    shortMsg="Low alignment — consider moving on and prioritise safety and wellbeing.";
-    actions=["Plan a job search soon.","Seek professional/peer support.","Target healthier roles."];
-  }
+  if(finalScorePct>=75){shortMsg="Strong alignment — staying is reasonable; keep building leverage.";actions=["Keep documenting wins.","Prepare a case for fair pay.","Plan a 6–12 month growth roadmap."];}
+  else if(finalScorePct>=55){shortMsg="Mixed alignment — explore selectively while improving key gaps.";actions=["Discuss growth with manager.","Upgrade 2–3 skills.","Start passive job search."];}
+  else if(finalScorePct>=40){shortMsg="Explore better options; update resume and talk to peers.";actions=["Update CV.","Plan exit if wellbeing is poor.","Seek referrals."];}
+  else {shortMsg="Low alignment — consider moving on.";actions=["Plan job search soon.","Seek support.","Target healthier roles."];}
 
   if(mental>=60) actions.unshift("Address mental health first.");
   if(runway<3 && incomeDep===1) actions.push("Boost savings before risking change.");
   if(curSal<indSal*0.85) actions.push("You're paid below industry avg — negotiate or move.");
 
   // Banner
-  const summaryNode = $('summary'); summaryNode.innerHTML="";
-  const banner=document.createElement('div');
-  let toneClass='score-mid'; if(finalScore<=3) toneClass='score-low'; else if(finalScore>=7) toneClass='score-high';
-  banner.className=`result-banner ${toneClass}`;
+  const summaryNode=$('summary');summaryNode.innerHTML="";
+  let toneClass='score-mid';if(finalScore<=3) toneClass='score-low'; else if(finalScore>=7) toneClass='score-high';
+  const banner=document.createElement('div');banner.className=`result-banner ${toneClass}`;
 
   const top=document.createElement('div'); top.className='banner-row';
   const icon=document.createElement('div'); icon.className='badge-icon'; icon.textContent='i';
@@ -160,57 +131,59 @@ function analyze(){
   [top,msg,sub].forEach(x=>banner.appendChild(x));
   summaryNode.appendChild(banner);
 
-  // Actions list
-  const list=$('actionsList'); list.innerHTML="";
+  // Actions
+  const list=$('actionsList');list.innerHTML="";
   actions.forEach(a=>{
-    const li=document.createElement('li'); li.innerText="✅ "+a;
+    const li=document.createElement('li');
+    li.innerText="✅ "+a;
     list.appendChild(li);
   });
 
-  // Breakdown
+  // Bars
   const comps={
     "Salary vs Industry":Math.round(salaryRel*100),
-    "Income dependence (lower is better)":Math.round((1-incomeDep)*100),
+    "Income dependence":Math.round((1-incomeDep)*100),
     "Growth opportunities":Math.round(growthScore*100),
     "Learning opportunities":Math.round(learningScore*100),
-    "Skill fit / marketability":Math.round(skillComposite*100),
+    "Skill fit":Math.round(skillComposite*100),
     "Work-life balance":Math.round(workLifeScore*100),
-    "Mental health impact (lower better)":Math.round(mentalScore*100),
+    "Mental health":Math.round(mentalScore*100),
     "Job satisfaction":Math.round(satisfactionScore*100)
   };
-  const bars=$('bars'); bars.innerHTML="";
+  const bars=$('bars');bars.innerHTML="";
   Object.entries(comps).forEach(([k,val])=>{
-    const row=document.createElement('div'); row.className='bar-row';
-    const label=document.createElement('div'); label.className='bar-label'; label.innerText=k;
-    const track=document.createElement('div'); track.className='bar-track';
-    const fill=document.createElement('div'); fill.className='bar-fill'; fill.style.width='0%';
-    const pct=document.createElement('div'); pct.className='bar-percent'; pct.innerText=val+"%";
+    const row=document.createElement('div');row.className='bar-row';
+    const label=document.createElement('div');label.className='bar-label';label.innerText=k;
+    const track=document.createElement('div');track.className='bar-track';
+    const fill=document.createElement('div');fill.className='bar-fill';fill.style.width='0%';
+    const pct=document.createElement('div');pct.className='bar-percent';pct.innerText=val+"%";
     if(val<=40) pct.classList.add('low'); else if(val<=70) pct.classList.add('mid'); else pct.classList.add('high');
-    track.appendChild(fill); [label,track,pct].forEach(x=>row.appendChild(x)); bars.appendChild(row);
-    setTimeout(()=>{ fill.style.width=val+"%"; },80);
+    track.appendChild(fill);[label,track,pct].forEach(x=>row.appendChild(x));bars.appendChild(row);
+    setTimeout(()=>{fill.style.width=val+"%";},80);
   });
 
-  // Score gauge
+  // Score visuals
   if($('scoreNum')) $('scoreNum').innerText=`${finalScore}/10`;
   if($('gaugeArc')) $('gaugeArc').setAttribute('stroke-dasharray',`${finalScorePct},100`);
   if($('gaugeText')) $('gaugeText').innerText=finalScore;
 
-  // Radar chart
+  // Chart
   try{
     const ctx=$('miniChart')?.getContext('2d');
     if(ctx){
       if(window._miniChart) window._miniChart.destroy();
       window._miniChart=new Chart(ctx,{
         type:'radar',
-        data:{labels:Object.keys(comps),datasets:[{label:"Profile",data:Object.values(comps),backgroundColor:'rgba(250,204,21,0.14)',borderColor:'#facc15',pointBackgroundColor:'#d4a017'}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{beginAtZero:true,max:100,ticks:{display:false}}}}
+        data:{labels:Object.keys(comps),datasets:[{data:Object.values(comps),backgroundColor:'rgba(250,204,21,0.14)',borderColor:'#facc15'}]},
+        options:{plugins:{legend:{display:false}},scales:{r:{beginAtZero:true,max:100,ticks:{display:false}}}}
       });
     }
   }catch(e){console.warn(e);}
-
   $('result').classList.remove('hidden');
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
+
+
 
 
 
