@@ -1,4 +1,4 @@
-:root{
+:root {
 	--bg:#fbfdff;
 	--card:#ffffff;
 	--muted:#6b7280;
@@ -9,7 +9,6 @@
 body{
 	font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
 	margin:0;background:var(--bg);color:#0f172a;padding:12px 12px;
-	/* tulips background sits outside the white card and remains fixed */
 	background-image: url('Anime fantasy landsc.png');
 	background-size: cover;
 	background-position: center center;
@@ -22,11 +21,19 @@ body{
 .lead{color:var(--muted);margin:0 0 18px}
 
 .form-wrapper{max-width:640px;margin:0 auto}
-form{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+form{
+	background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+	padding:18px;
+	border-radius:12px;
+	box-shadow:0 12px 30px rgba(2,6,23,0.10);
+	position:relative;
+	border: 1px solid rgba(255,255,255,0.6);
+	backdrop-filter: blur(10px) saturate(1.04);
+	-webkit-backdrop-filter: blur(10px) saturate(1.04);
+}
 
 .group{margin-bottom:18px;padding:12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(15,23,42,0.02)}
 
-/* Glass effect (modern iOS/macOS-style) - use on card panels to create translucency */
 .glass{
 	background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(255,255,255,0.48));
 	border: 1px solid rgba(255,255,255,0.5);
@@ -41,13 +48,13 @@ form{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 8px 20p
 	box-shadow: 0 12px 30px rgba(2,6,23,0.14), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 
-/* Fallback for older browsers that don't support backdrop-filter */
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
 	.glass{
 		background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
 		box-shadow: 0 6px 18px rgba(2,6,23,0.08);
 	}
 }
+
 .group h2{font-size:15px;margin:0 0 10px;color:#0f172a}
 label{display:block;margin:8px 0;font-size:14px;color:#111}
 input[type=text],input[type=number],select{width:100%;padding:10px;border:1px solid #eef2ff;border-radius:8px;background:#fbfbff}
@@ -60,7 +67,6 @@ button#reset{background:#6b7280}
 
 .result{
 	margin-top:18px;
-	/* glass effect for results: translucent so background peeks through */
 	background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.64));
 	padding:16px;border-radius:12px;
 	border:1px solid rgba(255,255,255,0.6);
@@ -68,73 +74,43 @@ button#reset{background:#6b7280}
 	backdrop-filter: blur(10px) saturate(1.04);
 	-webkit-backdrop-filter: blur(10px) saturate(1.04);
 }
-
-/* Keep inner result content (like lists/pre) clearly readable */
-.result > *{
-	position:relative;z-index:2;
-}
+.result > *{position:relative;z-index:2}
 .hidden{display:none}
 
 pre#breakdown{background:#ffffff;padding:12px;border-radius:8px;color:#0f172a;overflow:auto;border:1px solid #f1f5f9}
 
 footer{margin-top:12px;color:var(--muted);font-size:13px}
-
 .support{max-width:860px;margin:18px auto}
-
 .page-nav{margin-top:8px}
 .nav-btn{background:var(--accent);border:0;color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer}
 .nav-btn:disabled{opacity:0.4;cursor:not-allowed}
 
-/* Page slide transitions */
 .page{transition:transform 360ms ease, opacity 360ms ease}
 .page.enter{transform:translateX(0);opacity:1}
 .page.leave-left{transform:translateX(-20px);opacity:0}
 .page.leave-right{transform:translateX(20px);opacity:0}
 
-/* Use tulips background for the outer form card (so image sits in the white space)
-   and keep a soft overlay so form controls remain readable. */
-form{
-	/* glass outer card: translucent background so the tulips image shows through, with a gentle blur */
-	background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
-	padding:18px;
-	border-radius:12px;
-	box-shadow:0 12px 30px rgba(2,6,23,0.10);
-	position:relative;
-	border: 1px solid rgba(255,255,255,0.6);
-	backdrop-filter: blur(10px) saturate(1.04);
-	-webkit-backdrop-filter: blur(10px) saturate(1.04);
-}
-
-/* subtle overlay between the fixed background and the white card
-   - sits behind the form content but above the background image
-   - provides a soft white gradient (helps readability when scrolling)
-   - small backdrop-filter blur to slightly mute the background under the overlay
-*/
 .bg-overlay{
 	position:fixed;
-	inset:0; /* cover the viewport */
-	pointer-events:none; /* allow clicks through to the page */
-	z-index:0; /* behind the form which uses z-index:1 on .group */
+	inset:0;
+	pointer-events:none;
+	z-index:0;
 }
 .bg-overlay::before{
 	content:"";
 	position:absolute;inset:0;
-	/* soft white gradient from top to bottom so the top stays lighter */
 	background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.92) 40%, rgba(255,255,255,0.98) 65%, rgba(255,255,255,1) 100%);
 	mix-blend-mode: normal;
 }
 .bg-overlay::after{
 	content:"";
 	position:absolute;inset:0;
-	/* gentle vignette around the page edges */
 	background: radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.06) 100%);
 	pointer-events:none;
-	/* soften the background behind the overlay slightly */
 	backdrop-filter: blur(6px) saturate(1.02);
 	-webkit-backdrop-filter: blur(6px) saturate(1.02);
 }
 
-/* keep groups fully opaque above the background */
 form .group{
 	position: relative;
 	z-index: 1;
@@ -151,68 +127,81 @@ form .group{
 .score-meta{font-size:13px;color:#6b7280}
 .score-meta #scoreNum{font-weight:700;color:#a16207}
 .score-right{flex:1;min-width:220px;display:flex;flex-direction:column;align-items:center}
-/* top area with gauge and numeric score */
 .score-top{display:flex;flex-direction:column;align-items:center}
 .score-top .circular-chart.small{width:86px;height:86px}
 .score-top .score-meta{margin-top:6px;text-align:center}
 .score-top .score-meta #scoreNum{font-size:20px;font-weight:800;color:#f5ca0a}
-
-/* score pop animation */
 .score-pop{animation:score-pop 520ms cubic-bezier(.2,.9,.2,1)}
-@keyframes score-pop{
-	0%{transform:scale(.88);opacity:0}
-	40%{transform:scale(1.06);opacity:1}
-	100%{transform:scale(1);opacity:1}
-}
-/* make the chart canvas responsive */
-/* chart canvas sizing */
+@keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 #miniChart{width:100% !important;display:block}
-
-/* wrapper to control height when Chart.js is responsive */
 .score-right{flex:1;min-width:220px}
 .score-right .chart-wrap{height:160px;width:100%;max-width:420px}
 
-/* Form grid for wider screens */
 @media(min-width:880px){
 	.form-grid{display:block;gap:12px}
 	.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 	.group.two-col{padding:14px}
-	/* on wide screens allow the radar to be wider */
-			#miniChart{display:block}
-		.score-right .chart-wrap{height:200px}
+	#miniChart{display:block}
+	.score-right .chart-wrap{height:200px}
+}
+@media(max-width:640px){
+	.score-right .chart-wrap{height:140px}
+	.circular-chart.small{width:64px;height:64px}
 }
 
-	@media(max-width:640px){
-		.score-right .chart-wrap{height:140px}
-		.circular-chart.small{width:64px;height:64px}
-	}
+/* Banner base */
+.result-banner{
+	transition:transform 260ms ease, opacity 260ms ease;
+	display:flex;flex-direction:column;gap:12px;
+	padding:14px;border-radius:12px;
+	border:1px solid rgba(250,204,21,0.12);
+}
 
-/* Banner tweaks */
-.result-banner{transition:transform 260ms ease, opacity 260ms ease}
-.result-banner.enter{transform:translateY(0);opacity:1}
-.result-banner.leave{transform:translateY(-6px);opacity:0}
+/* Score-based tones */
+.result-banner.score-low{
+	background:linear-gradient(180deg,#fef2f2,#fee2e2);
+	border-color:rgba(239,68,68,0.2);
+}
+.result-banner.score-low .banner-message{color:#b91c1c}
+.result-banner.score-low .pill{color:#b91c1c;border-color:rgba(239,68,68,0.2)}
 
-.banner-message{color:#92400e;font-size:16px;margin:4px 0;font-weight:600}
-.banner-sub{color:#6b7280;font-size:13px}
+.result-banner.score-mid{
+	background:linear-gradient(180deg,#fffbeb,#fffbec);
+	border-color:rgba(250,204,21,0.2);
+}
+.result-banner.score-mid .banner-message{color:#a16207}
+.result-banner.score-mid .pill{color:#a16207;border-color:rgba(250,204,21,0.2)}
 
-.bar-row{display:flex;align-items:center;margin:8px 0}
-.bar-label{width:140px;min-width:110px;font-size:14px;color:var(--muted)}
-.bar-track{flex:1;background:#f1f5f9;height:12px;border-radius:8px;overflow:hidden;margin-left:10px}
-.bar-fill{height:100%;background:linear-gradient(90deg,#fff59d,#f5f50a);width:0%;transition:width 800ms ease}
+.result-banner.score-high{
+	background:linear-gradient(180deg,#ecfdf5,#d1fae5);
+	border-color:rgba(16,185,129,0.2);
+}
+.result-banner.score-high .banner-message{color:#047857}
+.result-banner.score-high .pill{color:#047857;border-color:rgba(16,185,129,0.2)}
 
-
-/* Result banner similar to the attachment */
-.result-banner{display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,#fffbeb,#fffbec);border:1px solid rgba(250,204,21,0.12);padding:14px;border-radius:12px}
-.banner-row{display:flex;align-items:center;gap:12px}
-.badge-icon{width:20px;height:20px;border-radius:50%;border:2px solid #fff9c4;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#a16207;font-weight:700}
+/* Pills */
 .pills{display:flex;gap:8px;margin-left:8px}
-.pill{background:#fff;padding:6px 10px;border-radius:999px;font-size:13px;color:#a16207;display:inline-block;border:1px solid rgba(250,204,21,0.06)}
-.pill.small{font-size:12px;padding:5px 8px;color:#f5f50a}
-.banner-message{color:#a16207;font-size:16px;margin:4px 0}
+.pill{background:#fff;padding:6px 10px;border-radius:999px;font-size:13px;display:inline-block}
+.pill.small{font-size:12px;padding:5px 8px}
+
+/* Messages */
+.banner-message{font-size:16px;margin:4px 0;font-weight:600}
 .banner-sub{color:#6b7280;font-size:14px}
 
 .result-actions{margin-top:8px}
-.result-actions ul{margin:8px 0 0 18px}
+.result-actions button{
+	background:#f5f50a;
+	border:none;
+	padding:8px 12px;
+	border-radius:8px;
+	font-weight:600;
+	cursor:pointer;
+	color:#111;
+	transition:background 0.2s ease;
+}
+.result-actions button:hover{background:#e5e20a}
+
+
 
 
 
