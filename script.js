@@ -28,29 +28,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
       } else {
         p.classList.remove('enter');
         p.classList.add(direction === 'right' ? 'leave-left' : 'leave-right');
-        // hide after transition
         setTimeout(()=>{ if(i!==n) p.style.display = 'none'; }, 360);
       }
     }
     currentPage = n;
-  const prev = document.getElementById('prevPage');
-  const next = document.getElementById('nextPage');
-  if(prev) prev.disabled = n===1;
-  if(next){
-    if(n===totalPages){
-      next.style.display = 'none';
-    } else {
-      next.style.display = '';
-      next.textContent = '▶';
+    const prev = document.getElementById('prevPage');
+    const next = document.getElementById('nextPage');
+    if(prev) prev.disabled = n===1;
+    if(next){
+      if(n===totalPages){
+        next.style.display = 'none';
+      } else {
+        next.style.display = '';
+        next.textContent = '▶';
+      }
     }
-  }
   }
   showPage(1);
   const prevBtn = $('prevPage'); const nextBtn = $('nextPage');
   if(prevBtn) prevBtn.addEventListener('click', ()=>{ if(currentPage>1) showPage(currentPage-1); });
-  if(nextBtn) nextBtn.addEventListener('click', ()=>{ if(currentPage<totalPages) showPage(currentPage+1); else { /* last page: focus analyze */ $('analyze').focus(); } });
+  if(nextBtn) nextBtn.addEventListener('click', ()=>{ if(currentPage<totalPages) showPage(currentPage+1); else { $('analyze').focus(); } });
 
-  // Support scheduling handlers (optional callback form)
+  // Support scheduling handlers
   const mentalBtn = $('mentalSupport');
   const cbForm = $('callbackForm');
   if(mentalBtn && cbForm){ mentalBtn.addEventListener('click', ()=> cbForm.classList.toggle('hidden')) }
@@ -59,7 +58,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function analyze(){
-  // Helper: get an input value from container `cPage1..cPage5` if present, otherwise from global id
   function getFromPages(selector){
     for(let i=1;i<=5;i++){
       const page = document.getElementById('cPage'+i);
@@ -71,7 +69,7 @@ function analyze(){
     return document.querySelector(selector);
   }
 
-  // Read inputs (try page containers first)
+  // Read inputs
   const jobTitleEl = getFromPages('#jobTitle') || getFromPages('input[name=jobTitle]');
   const jobTitle = jobTitleEl ? (jobTitleEl.value||'').trim() : '';
   const years = Number((getFromPages('#yearsExp') || {}).value || 0);
@@ -92,15 +90,15 @@ function analyze(){
   const culture = (getFromPages('#culture') || {}).value ? (getFromPages('#culture').value||'').trim() : '';
   const notes = (getFromPages('#notes') || {}).value ? (getFromPages('#notes').value||'').trim() : '';
 
-  // Normalize components to 0..1 where higher means better for staying
-  const salaryRel = indSal > 0 ? Math.min(1, curSal / indSal) : 0.8; // relative to industry
+  // Normalize
+  const salaryRel = indSal > 0 ? Math.min(1, curSal / indSal) : 0.8;
   const growthScore = growthOps/100;
   const learningScore = learningOps/100;
   const workLifeScore = workLife/100;
-  const mentalScore = 1 - Math.min(1, mental/100); // lower mental impact -> higher score
+  const mentalScore = 1 - Math.min(1, mental/100);
   const satisfactionScore = satisfaction/100;
 
-  // Weights (can be tuned)
+  // Weights
   const weights = {
     salary: 0.18,
     incomeDependence: 0.12,
@@ -112,10 +110,8 @@ function analyze(){
     satisfaction: 0.07
   };
 
-  // Skill-related composite
   const skillComposite = (skillMatch * 0.7) + (betterSkills * 0.3) * 1.0;
 
-  // Compose final score
   const score = (
     salaryRel * weights.salary +
     (1 - incomeDep) * weights.incomeDependence +
@@ -127,11 +123,10 @@ function analyze(){
     satisfactionScore * weights.satisfaction
   );
 
-  // Normalize to 0..100 and map to 0..10 for display
   const finalScorePct = Math.round((score / Object.values(weights).reduce((a,b)=>a+b,0)) * 100);
   const finalScore = Math.round(finalScorePct/10);
 
-  // Decide recommendation tiers
+  // Recommendation tiers
   let recommendation = '';
   const actions = [];
   let shortMsg = '';
@@ -161,19 +156,27 @@ function analyze(){
     actions.push('Prioritize roles with demonstrable growth, better compensation, and healthier culture.');
   }
 
-  // Add personalized tweaks
   if(mental >= 60){ actions.unshift('Address mental health first: speak to a professional or HR where possible.'); }
   if(runway < 3 && incomeDep === 1){ actions.push('Boost emergency savings or secure a side income before risking a job change.'); }
   if(curSal < indSal * 0.85){ actions.push('Your pay is significantly below industry average — prepare to negotiate or seek market offers.'); }
 
-  // Show results
-  // Build a banner similar to the attached design
+  // Build result banner
   const salaryDeltaPct = indSal > 0 ? Math.round(((curSal - indSal) / indSal) * 100) : 0;
   const salaryDeltaLabel = salaryDeltaPct === 0 ? 'Salary Δ 0.0%' : `${salaryDeltaPct > 0 ? 'Salary ↑' : 'Salary Δ'} ${Math.abs(salaryDeltaPct)}%`;
 
   const summaryNode = $('summary');
   summaryNode.innerHTML = '';
-  const banner = document.createElement('div'); banner.className = 'result-banner';
+  const banner = document.createElement('div');
+
+  // Auto-assign score tone
+  let toneClass = 'score-mid';
+  if(finalScore <= 3){
+    toneClass = 'score-low';
+  } else if(finalScore >= 7){
+    toneClass = 'score-high';
+  }
+  banner.className = `result-banner ${toneClass}`;
+
   const top = document.createElement('div'); top.className = 'banner-row';
   const icon = document.createElement('div'); icon.className = 'badge-icon'; icon.textContent = 'i';
   const pills = document.createElement('div'); pills.className = 'pills';
@@ -186,16 +189,14 @@ function analyze(){
   const sub = document.createElement('div'); sub.className = 'banner-sub'; sub.textContent = `Context: ${jobTitle || '—'} ${culture? '• Culture: '+culture : ''} ${notes? '• Notes: '+notes : ''}`;
   banner.appendChild(top); banner.appendChild(msg); banner.appendChild(sub);
   summaryNode.appendChild(banner);
-  // trigger entry animation
+
   requestAnimationFrame(()=>{ banner.classList.add('enter'); setTimeout(()=> banner.classList.remove('enter'), 800); });
 
   const list = $('actionsList'); list.innerHTML = '';
   actions.forEach(a=>{ const li = document.createElement('li'); li.textContent = a; list.appendChild(li) });
 
-  // compute percent for visuals
   const pct = Math.max(0, Math.min(100, finalScorePct));
 
-  // Render bars
   const comps = {
     'Salary vs Industry': Math.round(salaryRel*100),
     'Income dependence (lower is better)': Math.round((1-incomeDep)*100),
@@ -222,15 +223,11 @@ function analyze(){
     setTimeout(()=>{ fill.style.width = val + '%'; }, 80);
   });
 
-  // Debug breakdown removed from UI to keep results clean
-
-  // Update score card visuals
   const scoreNum = document.getElementById('scoreNum'); if(scoreNum) scoreNum.textContent = `${finalScore}/10`;
   const gaugeArc = document.getElementById('gaugeArc'); const gaugeText = document.getElementById('gaugeText');
   if(gaugeArc) gaugeArc.setAttribute('stroke-dasharray', `${pct},100`);
   if(gaugeText) gaugeText.textContent = `${finalScore}`;
 
-  // Render mini Chart.js radar chart (radar gives a compact profile view)
   try{
     const mini = document.getElementById('miniChart');
     if(mini){
@@ -259,11 +256,9 @@ function analyze(){
   }catch(e){console.warn('mini chart failed',e)}
 
   $('result').classList.remove('hidden');
-  // animate score pop
   const scoreMeta = document.querySelector('.score-top .score-meta') || document.querySelector('.score-meta');
   if(scoreMeta){
     scoreMeta.classList.remove('score-pop');
-    // force reflow then add class
     void scoreMeta.offsetWidth;
     scoreMeta.classList.add('score-pop');
   }
@@ -282,6 +277,7 @@ function sendCallbackRequest(){
   const href = `mailto:${to}?subject=${subject}&body=${body}`;
   window.location.href = href;
 }
+
 
 
 
