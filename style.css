@@ -80,12 +80,19 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 @keyframes score-pop{0%{transform:scale(.88);opacity:0}40%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
 
 /* Radar chart fix */
-#miniChart{width:100%!important;display:block}
-.chart-wrap{
+#miniChart {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.chart-wrap {
   position: relative;
   width: 100%;
   max-width: 420px;
-  height: 240px;   /* stable height for chart */
+  aspect-ratio: 1 / 1;   /* keep chart square */
+}
+
 }
 @media(max-width:640px){
   .chart-wrap{height:180px;}
@@ -123,6 +130,7 @@ footer{margin-top:12px;color:var(--muted);font-size:13px}
 .bar-percent.low{color:#dc2626}
 .bar-percent.mid{color:#ca8a04}
 .bar-percent.high{color:#16a34a}
+
 
 
 
