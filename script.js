@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =======================
 function analyze() {
   // Track analytics event if available
-  const databuddy = window.databuddy // Declare the databuddy variable
+  const databuddy = window.databuddy // Declare the variable here
   if (typeof databuddy !== "undefined") {
     try {
       databuddy.track("analysis_completed")
