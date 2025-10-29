@@ -22,7 +22,7 @@
   </header>
 
   <main class="container">
-    <h1>Should I Stay or Move?</h1>
+    <h1>Should I Stay or Move? 🤔</h1>
     <p class="lead" style="color:#000000;font-weight:600">
       Answer the questions across the pages. Use sliders, dropdowns, and inputs. When done, click 
       <strong>Analyze</strong> for a personalized recommendation.
@@ -33,7 +33,7 @@
         <!-- Page 1 -->
         <div id="cPage1" class="page">
           <section class="group two-col">
-            <h2>Basic info</h2>
+            <h2>📋 Basic info</h2>
             <label>Job title
               <input type="text" id="jobTitle" placeholder="e.g., Software Engineer">
             </label>
@@ -52,7 +52,7 @@
         <!-- Page 2 -->
         <div id="cPage2" class="page" style="display:none">
           <section class="group two-col">
-            <h2>Financial & Dependence</h2>
+            <h2>💰 Financial & Dependence</h2>
             <label>How dependent are you on this job for income?
               <select id="incomeDependency">
                 <option value="0">Not much</option>
@@ -72,7 +72,7 @@
         <!-- Page 3 -->
         <div id="cPage3" class="page" style="display:none">
           <section class="group two-col">
-            <h2>Skills & Growth</h2>
+            <h2>🚀 Skills & Growth</h2>
             <label>Do your skills match this role?
               <select id="skillMatch">
                 <option value="0">No</option>
@@ -109,7 +109,7 @@
         <!-- Page 4 -->
         <div id="cPage4" class="page" style="display:none">
           <section class="group two-col">
-            <h2>Well-being & Balance</h2>
+            <h2>🧘 Well-being & Balance</h2>
             <label>Work-life balance
               <input type="range" id="workLife" min="0" max="100" value="50">
               <output id="workLifeVal">50</output>
@@ -132,7 +132,7 @@
         <!-- Page 5 -->
         <div id="cPage5" class="page" style="display:none">
           <section class="group">
-            <h2>Extra context</h2>
+            <h2>📝 Extra context</h2>
             <label>Company culture
               <input type="text" id="culture" placeholder="e.g., supportive, toxic">
             </label>
@@ -150,15 +150,15 @@
         </div>
 
         <div class="actions">
-          <button type="button" id="analyze" disabled>Analyze</button>
-          <button type="button" id="reset">Reset</button>
+          <button type="button" id="analyze" disabled>🎯 Analyze</button>
+          <button type="button" id="reset">🔄 Reset</button>
         </div>
       </form>
     </div>
 
     <!-- Results -->
     <section id="result" class="result hidden">
-      <h2>Recommendation</h2>
+      <h2>📊 Your Career Decision Analysis</h2>
       <div id="scoreCard" class="score-card">
         <div class="score-right">
           <div class="score-top">
@@ -176,9 +176,23 @@
       </div>
 
       <div id="summary"></div>
-      <h3>Actionable next steps</h3>
+
+      <!-- Added new insights sections -->
+      <div id="detailedInsights"></div>
+      
+      <div id="prosConsSection"></div>
+      
+      <div id="riskAssessment"></div>
+      
+      <div id="timelineSection"></div>
+
+      <h3>✅ Actionable next steps</h3>
       <ul id="actionsList"></ul>
-      <h3>Score breakdown</h3>
+      
+      <!-- Added resources section -->
+      <div id="resourcesSection"></div>
+
+      <h3>📈 Score breakdown</h3>
       <div id="bars"></div>
     </section>
 
@@ -209,20 +223,3 @@ async
   ></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
